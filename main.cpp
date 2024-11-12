@@ -1,53 +1,55 @@
+#define SDL_MAIN_HANDLED
+#include <SDL2/SDL.h>
+
 #include <iostream>
 
-#include "input-manager/Callback.h"
-#include "input-manager/Event.h"
-
-void Hello()
+int main(int argc, char* argv[])
 {
-    std::cout << "Hello!" << std::endl;
-}
-
-void Hello2()
-{
-    std::cout << "Hello!" << std::endl;
-}
-
-class A
-{
-public:
-    void HelloFromA()
-    {
-        std::cout << "A";
+    // Initialize SDL
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+        return 1;
     }
-    void HelloFromA2()
-    {
-        std::cout << "A";
+
+    // Create a window
+    SDL_Window* win = SDL_CreateWindow("Hello SDL", 100, 100, 640, 480, SDL_WINDOW_SHOWN);
+    if (win == nullptr) {
+        std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        return 1;
     }
-};
 
-class B
-{
-public:
-    void HelloFromB()
-    {
-        std::cout << "b";
+    // Create a renderer
+    SDL_Renderer* ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (ren == nullptr) {
+        std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
     }
-};
 
-int main()
-{
-    tlr::Event event;
-    A a;
-    
-    A a1;
-    
-    
-    event.UnregisterCallback(&a, &A::HelloFromA2);
+    // Main loop
+    bool running = true;
+    SDL_Event event;
+    while (running) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                running = false;
+            }
+        }
 
-    event.Raise();    
+        // Clear the screen
+        SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+        SDL_RenderClear(ren);
 
+        // Present the screen
+        SDL_RenderPresent(ren);
+    }
 
-    
+    // Clean up
+    SDL_DestroyRenderer(ren);
+    SDL_DestroyWindow(win);
+    SDL_Quit();
+
     return 0;
 }
