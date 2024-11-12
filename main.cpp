@@ -42,11 +42,11 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    tlr::InputManager manager;
+    tlr::InputManager &manager = tlr::InputManager::GetInstance();
     
     manager.KeyPressed[SDLK_a][KMOD_NONE].RegisterCallback(hello);
     manager.KeyPressed[SDLK_ESCAPE][KMOD_NONE].RegisterCallback(Close);
-    manager.KeyPressed[SDLK_b][KMOD_ALT].RegisterCallback(hello);
+    manager.KeyPressed[SDLK_b][KMOD_LALT | KMOD_LCTRL].RegisterCallback(hello);
 
     while (running)
     {
