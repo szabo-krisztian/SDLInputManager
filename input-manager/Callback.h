@@ -23,7 +23,7 @@ public:
         _pMethod(std::forward<Args>(args)...);
     }
 
-    bool Equals(ICallback const& other) const override
+    bool Equals(ICallback<Args...> const& other) const override
     {
         if (auto otherObj = dynamic_cast<Callback const*>(&other))
         {
@@ -49,7 +49,7 @@ public:
         (_object->*_pMemberMethod)(std::forward<Args>(args)...);
     }
 
-    bool Equals(ICallback const& other) const override
+    bool Equals(ICallback<Args...> const& other) const override
     {
         if (auto otherObj = dynamic_cast<Callback const*>(&other))
         {
