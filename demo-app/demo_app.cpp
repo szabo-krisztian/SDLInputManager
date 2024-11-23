@@ -28,19 +28,14 @@ DemoApp::~DemoApp()
     SDL_Quit();
 }
 
-void k()
-{
-    std::cout <<"Hello" << std::endl;
-}
-
 void DemoApp::Quit()
 {
     _running = false;
 }
 
-void DemoApp::Sayhi()
+void DemoApp::SayHi()
 {
-    std::cout <<"Hello from obj" << std::endl;
+    std::cout <<"Hi" << std::endl;
 }
 
 void Mouse(int x, int y)
@@ -50,16 +45,21 @@ void Mouse(int x, int y)
 
 void DemoApp::Run()
 {
-    _inputManager.KeyPressed[SDLK_a][KMOD_LALT | KMOD_LCTRL].RegisterCallback(k);
+    /*
+    _inputManager.KeyPressed[SDLK_a][KMOD_NONE].RegisterCallback(this, SayHi);
+    _inputManager.KeyReleased[SDLK_b][KMOD_NONE].RegisterCallback(this, SayHi);
     
-    _inputManager.MousePressed[SDL_BUTTON_LEFT][KMOD_LALT].RegisterCallback(this, Sayhi);
+    _inputManager.MousePressed[SDL_BUTTON_LEFT][KMOD_LALT].RegisterCallback(this, SayHi);
+    _inputManager.MouseReleased[SDL_BUTTON_LEFT][KMOD_LALT].RegisterCallback(this, SayHi);
+
+    _inputManager.KeyHold[SDLK_u][KMOD_LALT].RegisterCallback(this, SayHi);
+    _inputManager.MouseHold[SDL_BUTTON_LEFT][KMOD_LALT].RegisterCallback(this, SayHi);
 
     _inputManager.MouseMotion.RegisterCallback(Mouse);
-    _inputManager.MouseMotion.UnregisterCallback(Mouse);
-    
+    */
+
     _inputManager.KeyPressed[SDLK_ESCAPE][KMOD_NONE].RegisterCallback(this, Quit);
     
-
     while (_running)
     {
         _inputManager.Update();

@@ -2,12 +2,6 @@
   "name": "opengl-start",
   "version": "1.0.0",
   "dependencies": [
-      "sdl2",
-      "glm",
-      "opengl",
-      "glew",
-      {
-        "name": "imgui", "features": ["sdl2-binding", "opengl3-binding"]
-      }
+      "sdl2"
   ]
 }

@@ -17,8 +17,7 @@ public:
 
     void Run();
     void Quit();
-
-    void Sayhi();
+    void SayHi();
     
 private:
     bool _running = true;
