@@ -15,19 +15,24 @@ public:
     static InputManager& GetInstance();
 
     template<typename KeyType>
-    using ModEventMap = std::unordered_map<KeyType, std::unordered_map<Uint16, Event<>>>;
+    using DoubleMap = std::unordered_map<KeyType, std::unordered_map<Uint16, Event<>>>;
 
-    ModEventMap<SDL_Keycode> KeyPressed;
-    ModEventMap<SDL_Keycode> KeyReleased;
+    Event<int, int> MouseMotion;
 
-    ModEventMap<Uint8> MousePressed;
-    ModEventMap<Uint8> MouseReleased;
+    DoubleMap<SDL_Keycode> KeyPressed;
+    DoubleMap<SDL_Keycode> KeyReleased;
+    DoubleMap<SDL_Keycode> KeyHold;
 
-    // TODO: write hold events for keyboard and mouse buttons
-
+    DoubleMap<Uint8> MousePressed;
+    DoubleMap<Uint8> MouseReleased;
+    DoubleMap<Uint8> MouseHold;
+    
     void Update();
 
 private:
+    Uint8 const* _keyState;
+    int _mouseX, _mouseY;
+    Uint32 _mouseState;
     SDL_Keymod _modState;
 
     InputManager() = default;
@@ -36,7 +41,13 @@ private:
     void ProcessEvent(SDL_Event const& event);
     
     template<typename T>
-    void NotifyCallbacks(T const& button, ModEventMap<T>& map);
+    void NotifyPressAndReleaseCallbacks(T const& button, DoubleMap<T>& map);
+    
+    void NotifyKeyHoldCallbacks();
+    
+    void NotifyMouseHoldCallbacks();
+    
+    void RaiseEvents(std::unordered_map<Uint16, Event<>> const& modEventmap);
 };
 
 } // namespace tlr

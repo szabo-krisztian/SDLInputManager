@@ -11,13 +11,19 @@ InputManager& InputManager::GetInstance()
 
 void InputManager::Update()
 {
+    _keyState = SDL_GetKeyboardState(NULL);
+    _mouseState = SDL_GetMouseState(&_mouseX, &_mouseY);
     _modState = SDL_GetModState();
-
+    
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
         ProcessEvent(event);
     }
+
+    MouseMotion.Raise(_mouseX, _mouseY);
+    NotifyKeyHoldCallbacks();
+    NotifyMouseHoldCallbacks();
 }
 
 void InputManager::ProcessEvent(SDL_Event const& event)
@@ -27,29 +33,29 @@ void InputManager::ProcessEvent(SDL_Event const& event)
     
     case SDL_KEYDOWN:
     {
-        NotifyCallbacks(event.key.keysym.sym, KeyPressed);
+        NotifyPressAndReleaseCallbacks(event.key.keysym.sym, KeyPressed);
     } break;
     
     case SDL_KEYUP:
     {
-        NotifyCallbacks(event.key.keysym.sym, KeyReleased);
+        NotifyPressAndReleaseCallbacks(event.key.keysym.sym, KeyReleased);
     } break;
 
     case SDL_MOUSEBUTTONDOWN:
     {
-        NotifyCallbacks(event.button.button, MousePressed);
+        NotifyPressAndReleaseCallbacks(event.button.button, MousePressed);
     } break;
 
     case SDL_MOUSEBUTTONUP:
     {
-        NotifyCallbacks(event.button.button, MouseReleased);
+        NotifyPressAndReleaseCallbacks(event.button.button, MouseReleased);
     } break;
 
     }
 }
 
 template<typename T>
-void InputManager::NotifyCallbacks(T const& button, ModEventMap<T>& map)
+void InputManager::NotifyPressAndReleaseCallbacks(T const& button, DoubleMap<T>& map)
 {
     auto buttonIt = map.find(button);
     if (buttonIt == map.end())
@@ -57,7 +63,34 @@ void InputManager::NotifyCallbacks(T const& button, ModEventMap<T>& map)
         return;
     }
     
-    for (auto const& [mod, event] : buttonIt->second)
+    RaiseEvents(buttonIt->second);
+}
+
+void InputManager::NotifyKeyHoldCallbacks()
+{
+    for (auto const& [key, modEventMap] : KeyHold)
+    {
+        if (_keyState[SDL_GetScancodeFromKey(key)])
+        {
+            RaiseEvents(modEventMap);
+        }
+    }
+}
+
+void InputManager::NotifyMouseHoldCallbacks()
+{
+    for (auto const& [button, modEventMap] : MouseHold)
+    {
+        if (_mouseState & SDL_BUTTON(button))
+        {
+            RaiseEvents(modEventMap);
+        }
+    }
+}
+
+void InputManager::RaiseEvents(std::unordered_map<Uint16, Event<>> const& modEventmap)
+{
+    for (auto const& [mod, event] : modEventmap)
     {   
         if ((_modState & (mod)) == mod)
         {
@@ -65,6 +98,5 @@ void InputManager::NotifyCallbacks(T const& button, ModEventMap<T>& map)
         }
     }
 }
-
 
 } // namespace tlr

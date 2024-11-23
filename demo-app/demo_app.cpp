@@ -43,11 +43,19 @@ void DemoApp::Sayhi()
     std::cout <<"Hello from obj" << std::endl;
 }
 
+void Mouse(int x, int y)
+{
+    std::cout << "x: " << x << ", " << "y: " << y << std::endl;
+}
+
 void DemoApp::Run()
 {
     _inputManager.KeyPressed[SDLK_a][KMOD_LALT | KMOD_LCTRL].RegisterCallback(k);
     
     _inputManager.MousePressed[SDL_BUTTON_LEFT][KMOD_LALT].RegisterCallback(this, Sayhi);
+
+    _inputManager.MouseMotion.RegisterCallback(Mouse);
+    _inputManager.MouseMotion.UnregisterCallback(Mouse);
     
     _inputManager.KeyPressed[SDLK_ESCAPE][KMOD_NONE].RegisterCallback(this, Quit);
     
