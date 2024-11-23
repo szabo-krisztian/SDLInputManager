@@ -4,7 +4,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "Event.h"
+#include "event.h"
 
 namespace tlr
 {
