@@ -28,12 +28,12 @@ manager.KeyPressed[SDLK_a][KMOD_LALT | KMOD_LCTRL].RegisterCallback(SayHi);
 // Unregister
 manager.KeyPressed[SDLK_a][KMOD_LALT | KMOD_LCTRL].UnegisterCallback(SayHi);
 
-// Mouse button press: 'left' with left alt
+// Mouse button release: 'left'
 A a;
-manager.MousePressed[SDL_BUTTON_LEFT][KMOD_LALT].RegisterCallback(&a, &A::DoSomething);
+manager.MouseReleased[SDL_BUTTON_LEFT][KMOD_NONE].RegisterCallback(&a, &A::DoSomething);
 
 // Unregister
-manager.MousePressed[SDL_BUTTON_LEFT][KMOD_LALT].UnregisterCallback(&a, &A::DoSomething);
+manager.MouseReleased[SDL_BUTTON_LEFT][KMOD_NONE].UnregisterCallback(&a, &A::DoSomething);
 
 /*
     Updating InputManager inside the render loop:
