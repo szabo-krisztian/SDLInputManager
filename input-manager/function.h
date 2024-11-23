@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include "IFunction.h"
+#include "ifunction.h"
 
 namespace tlr
 {

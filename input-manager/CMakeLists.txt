@@ -1,4 +1,4 @@
-add_library(InputManager InputManager.cpp)
+add_library(InputManager input_manager.cpp)
 
 target_link_libraries(InputManager
     PUBLIC

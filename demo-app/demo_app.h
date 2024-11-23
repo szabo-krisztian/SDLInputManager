@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-#include "../input-manager/InputManager.h"
+#include "../input-manager/input_manager.h"
 
 namespace tlr
 {
