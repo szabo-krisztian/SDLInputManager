@@ -11,7 +11,7 @@ InputManager& InputManager::GetInstance()
 
 void InputManager::Update()
 {
-    m_modState = SDL_GetModState();
+    _modState = SDL_GetModState();
 
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -57,11 +57,11 @@ void InputManager::NotifyCallbacks(T const& button, ModEventMap<T>& map)
         return;
     }
     
-    for (auto const& modEventPair : buttonIt->second)
-    {
-        if ((m_modState & (modEventPair.first)) == modEventPair.first)
+    for (auto const& [mod, event] : buttonIt->second)
+    {   
+        if ((_modState & (mod)) == mod)
         {
-            modEventPair.second.Raise();
+            event.Raise();
         }
     }
 }

@@ -21,9 +21,9 @@ public:
     void Sayhi();
     
 private:
-    bool m_running = true;
-    InputManager& m_inputManager;
-    SDL_Window* m_window = nullptr;
+    bool _running = true;
+    InputManager& _inputManager;
+    SDL_Window* _window = nullptr;
 };
 
 } // namespace tlr

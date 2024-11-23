@@ -23,16 +23,18 @@ public:
     ModEventMap<Uint8> MousePressed;
     ModEventMap<Uint8> MouseReleased;
 
+    // TODO: write hold events for keyboard and mouse buttons
+
     void Update();
 
 private:
-    SDL_Keymod m_modState;
+    SDL_Keymod _modState;
 
     InputManager() = default;
     ~InputManager() = default;
 
     void ProcessEvent(SDL_Event const& event);
-
+    
     template<typename T>
     void NotifyCallbacks(T const& button, ModEventMap<T>& map);
 };
