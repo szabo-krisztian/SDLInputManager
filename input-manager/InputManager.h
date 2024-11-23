@@ -26,10 +26,15 @@ public:
     void Update();
 
 private:
+    SDL_Keymod m_modState;
+
     InputManager() = default;
     ~InputManager() = default;
 
     void ProcessEvent(SDL_Event const& event);
+
+    template<typename T>
+    void NotifyCallbacks(T const& button, ModEventMap<T>& map);
 };
 
 } // namespace tlr

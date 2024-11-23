@@ -1,0 +1,60 @@
+# Ignore the build directory
+/build/
+
+# Ignore common C++ binary files
+*.out
+*.o
+*.a
+*.so
+*.dll
+*.exe
+*.obj
+*.pdb
+*.idb
+
+# Ignore the CMake build folder
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+
+# Ignore the vcpkg build folder
+/vcpkg_installed/
+
+# Ignore IDE/Editor files (optional, remove if you want to keep them)
+# Visual Studio
+.vs/
+.vscode/
+
+# CLion
+.idea/
+
+# Ignore temporary files
+*.log
+*.tmp
+*.swp
+*.bak
+*.old
+
+# Ignore coverage reports
+*.gcda
+*.gcno
+*.gcov
+
+# Ignore specific Mac system files
+.DS_Store
+
+# Ignore Windows system files
+Thumbs.db
+
+# Ignore dependency manager files
+# Ignore npm's package-lock.json if you are using it for a C++ node project
+package-lock.json
+node_modules/
+
+# Ignore user-specific settings
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+

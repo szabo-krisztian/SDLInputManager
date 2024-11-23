@@ -4,7 +4,7 @@
 #include <memory>
 #include <algorithm>
 
-#include "Callback.h"
+#include "function.h"
 
 namespace tlr
 {
@@ -13,32 +13,27 @@ template<typename... Args>
 class Event
 {
 public:
-    using MethodPtr = void (*)(Args...);
-
-    void RegisterCallback(MethodPtr pMethod)
+    void RegisterCallback(void (*pMethod)(Args...))
     {
-        _pCallbacks.push_back(std::make_unique<Callback<MethodPtr>>(pMethod));
+        _pCallbacks.push_back(std::make_unique<Function<void (*)(Args...)> >(pMethod));
     }
 
-    void UnregisterCallback(MethodPtr pMethod)
+    void UnregisterCallback(void (*pMethod)(Args...))
     {
-        Callback<MethodPtr> pCallback(pMethod);
+        Function<void (*)(Args...)> pCallback(pMethod);
         EraseCallback(&pCallback);
     }
-    
-    template<typename C>
-    using MemberMethodPtr = void (C::*)(Args...);
 
     template<typename C>
-    void RegisterCallback(C *object, MemberMethodPtr<C> pMemberMethod)
+    void RegisterCallback(C* object, void (C::*pMemberMethod)(Args...))
     {
-        _pCallbacks.push_back(std::make_unique<Callback<MemberMethodPtr<C>>>(object, pMemberMethod));
+        _pCallbacks.push_back(std::make_unique<Function<void (C::*)(Args...)> >(object, pMemberMethod));
     }
 
     template<typename C>
-    void UnregisterCallback(C *object, MemberMethodPtr<C> pMemberMethod)
+    void UnregisterCallback(C* object, void (C::*pMemberMethod)(Args...))
     {
-        Callback<MemberMethodPtr<C>> pCallback(object, pMemberMethod);
+        Function<void (C::*)(Args...)> pCallback(object, pMemberMethod);
         EraseCallback(&pCallback);
     }
 
@@ -51,9 +46,9 @@ public:
     }
 
 private:
-    std::vector<std::unique_ptr<ICallback<Args...>>> _pCallbacks;
+    std::vector<std::unique_ptr<IFunction<void, Args...>>> _pCallbacks;
 
-    void EraseCallback(ICallback<Args...> const* pCallbackToDelete)
+    void EraseCallback(IFunction<void, Args...> const* pCallbackToDelete)
     {
         auto it = std::find_if(_pCallbacks.cbegin(), _pCallbacks.cend(),
         [&pCallbackToDelete](auto const& pCallback)

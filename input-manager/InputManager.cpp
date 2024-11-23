@@ -11,6 +11,8 @@ InputManager& InputManager::GetInstance()
 
 void InputManager::Update()
 {
+    m_modState = SDL_GetModState();
+
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
@@ -22,22 +24,47 @@ void InputManager::ProcessEvent(SDL_Event const& event)
 {
     switch (event.type)
     {
+    
     case SDL_KEYDOWN:
     {
-        auto const& key = event.key.keysym.sym;
-        auto keycodeIt = KeyPressed.find(key);
-        
-        if (keycodeIt == KeyPressed.end()) break;
-        
-        SDL_Keymod modState = SDL_GetModState();
-        for (auto const& pair : KeyPressed[key])
-        {
-            if ((modState & (pair.first)) == pair.first) KeyPressed[key][pair.first].Raise();
-        }
+        NotifyCallbacks(event.key.keysym.sym, KeyPressed);
+    } break;
+    
+    case SDL_KEYUP:
+    {
+        NotifyCallbacks(event.key.keysym.sym, KeyReleased);
+    } break;
 
+    case SDL_MOUSEBUTTONDOWN:
+    {
+        NotifyCallbacks(event.button.button, MousePressed);
+    } break;
+
+    case SDL_MOUSEBUTTONUP:
+    {
+        NotifyCallbacks(event.button.button, MouseReleased);
     } break;
 
     }
 }
+
+template<typename T>
+void InputManager::NotifyCallbacks(T const& button, ModEventMap<T>& map)
+{
+    auto buttonIt = map.find(button);
+    if (buttonIt == map.end())
+    {
+        return;
+    }
+    
+    for (auto const& modEventPair : buttonIt->second)
+    {
+        if ((m_modState & (modEventPair.first)) == modEventPair.first)
+        {
+            modEventPair.second.Raise();
+        }
+    }
+}
+
 
 } // namespace tlr

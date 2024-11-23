@@ -1,8 +1,13 @@
 {
-    "name": "input-manager",
-    "version": "1.0.0",
-    "dependencies": [
-        "sdl2"
-    ],
-    "builtin-baseline": "e2edf52610d2c94d2038fe30b247ea5a26964e1b"
+  "name": "opengl-start",
+  "version": "1.0.0",
+  "dependencies": [
+      "sdl2",
+      "glm",
+      "opengl",
+      "glew",
+      {
+        "name": "imgui", "features": ["sdl2-binding", "opengl3-binding"]
+      }
+  ]
 }
